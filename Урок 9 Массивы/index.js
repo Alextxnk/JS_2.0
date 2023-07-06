@@ -139,8 +139,8 @@ console.log(names);
 // метод sort изменяет текущий массив, в то время как методы map и filter возвращали новый массив
 
 
-// методы splice, slice 
 
+// методы splice, slice 
 
 // splice - его задача в том, чтобы удалить какие-то элементы из массива и вставить на его позиции другие элементы 
 // этот метод изменяет текущий массив
@@ -152,7 +152,7 @@ console.log(cars); // ['Mercedes', 'Audi']
 
 const removedElements = cars.splice(0, 1, 'Ford', 'Maseratti');
 console.log(cars); // ['Ford', 'Maseratti', 'Audi']
-console.log(`removedElements: ${removedElements}`); // Mercedes
+console.log('removedElements:', removedElements); // ['Mercedes']
 
 
 // slice - этот метод принимает только два параметра, начало и кнец обрезки массива
@@ -161,7 +161,7 @@ console.log('slice');
 const agesOfDevelopers = [20, 25, 27, 30];
 const sliceElements = agesOfDevelopers.slice(0, 2);
 console.log(agesOfDevelopers); // [20, 25, 27, 30]
-console.log(`sliceElements: ${sliceElements}`); // 20,25
+console.log('sliceElements:', sliceElements); // [20, 25]
 
 
 // indexOf - ищет элемент в массиве и возвращает его индекс, если такого элемента нет, то мы получим -1
@@ -177,6 +177,36 @@ console.log(isCarIncludes); // true
 
 
 // split + join
+// split - разделяет строку и преобразует ее в массив
+console.log('split + join');
+const listOfOrders = 'Milk, Bread, Potato, Cheese, Water';
+const listOfOrdersArray = listOfOrders.split(', ');
+console.log('listOfOrdersArray:', listOfOrdersArray); // ['Milk', 'Bread', 'Potato', 'Cheese', 'Water']
+
+// join - делает из массива строку с помощью разделителя
+const listOfOrdersString = listOfOrdersArray.join('; ');
+console.log('listOfOrdersString:', listOfOrdersString); // Milk; Bread; Potato; Cheese; Water
+
+
+// reverse - разворачивает массив
+// этот метод изменяет текущий массив
+console.log('reverse');
+const reverseArray = listOfOrdersArray.reverse();
+console.log('reverseArray:', reverseArray); // ['Water', 'Cheese', 'Potato', 'Bread', 'Milk']
 
 
 
+// объединение строк нескольких массивов в один 
+// 1 способ
+// concat - этот метод может объединять сразу несколько массивов в один 
+// этот метод может принимать в себя неограниченное количество параметров
+
+console.log('concat');
+const concatArray = cars.concat(salaries, listOfOrdersArray);
+console.log('concatArray:', concatArray); // ['Ford', 'Maseratti', 'Audi', 150, 200, 250, 300, 400, 500, 700, 1000, 'Water', 'Cheese', 'Potato', 'Bread', 'Milk']
+
+// 2 способ - с помощью spread оператора [...]
+console.log('[...]');
+
+const allElements = [...cars, ...listOfOrdersArray];
+console.log('allElements:', allElements); // ['Ford', 'Maseratti', 'Audi', 'Water', 'Cheese', 'Potato', 'Bread', 'Milk']
