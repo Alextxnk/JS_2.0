@@ -31,3 +31,13 @@ console.log(user.calculateAge()); // 21
 user.getAllInfo(); // Имя: Alex, Возраст: 21
 
 
+// bind, call, apply - помогают привязать к функции определенный контекст
+
+const newUser = {
+   name: 'Dima'
+}
+
+const userName = user.getName.call(newUser);
+console.log('userName:', userName); // Dima
+
+
