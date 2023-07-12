@@ -256,14 +256,14 @@ class Car {
       return car instanceof Car;
    }
 
-   static initialParams = {
+   static #initialParams = {
       name: 'Audi',
       maxSpeed: 320
    }
 
    constructor(name, maxSpeed) {
-      this.name = name || Car.initialParams.name;
-      this.maxSpeed = maxSpeed || Car.initialParams.maxSpeed;
+      this.name = name || Car.#initialParams.name;
+      this.maxSpeed = maxSpeed || Car.#initialParams.maxSpeed;
    }
 
    drive() {
@@ -292,5 +292,7 @@ const initialParamsCar = new Car();
 console.log(initialParamsCar);
 initialParamsCar.drive();
 
-
+// static нужен нам чтобы создавать поля и методы, которые принадлежат именно классу,
+// а не каким-то конкретным его объектам,
+// также в static нельзя использовать this
 
