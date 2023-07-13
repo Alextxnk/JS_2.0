@@ -65,7 +65,7 @@ body {
     border: 2px solid var(--primary-color);
     border-radius: 5px;
     color: var(--primary-color);
-  
+
     font-size: 2rem;
     line-height: 2.5rem;
     height: 40px;
@@ -87,7 +87,7 @@ body {
     border: none;
     padding: 5px 20px;
     border-radius: 5px;
-  
+
     font-size: 1.5rem;
     line-height: 2.5rem;
 }
@@ -137,11 +137,11 @@ body {
     cursor: pointer;
     padding: 0.2em;
 }
-  
+
 .checkbox-form__checkbox  {
     display: none;
 }
-  
+
 .checkbox-form__checkbox + label:before {
     content: "\2714";
     border: 0.1em solid var(--checkbox-border-color);
