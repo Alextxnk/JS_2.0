@@ -2,7 +2,6 @@
 
 // Синхронный код - выполняется пошагово, сверху вниз
 
-
 /* setTimeout(() => console.log(2), 0); // 4
 
 Promise.resolve(1).then(console.log); // 3
@@ -19,7 +18,6 @@ console.log(4); // 2 */
 // 2 - микротаски - промисы. 1. 0
 // 3 - макротаски - таймауты. 2
 
-
 // setTimeout
 // setInterval
 // Они являются асинхронными
@@ -34,8 +32,7 @@ console.log(4); // 2 */
    console.log('setInterval');
 }, 5000) */
 
-
-// resolve - это функция, которая вызывается, если промис был выполнен успешно 
+// resolve - это функция, которая вызывается, если промис был выполнен успешно
 // reject - вызывается в случае ошибки
 
 // pending - undefined - ожидание
@@ -47,6 +44,12 @@ const developer = {
    isJSDev: true
 };
 
+// для обработки асинхронного кода у нас есть промис,
+// промис принимает в себя функцию и данная функция принимает в себя 
+// еще две функции resolve и reject
+// resolve нужен, чтобы выполнить промис со статусом fullfilled
+// reject - для того, чтобы промис выполнился со статусом rejected
+
 const promise = new Promise((resolve, reject) => {
    if (developer.isJSDev) {
       setTimeout(() => {
@@ -57,12 +60,24 @@ const promise = new Promise((resolve, reject) => {
    }
 });
 
-console.log(promise); // Promise { <pending> }
+console.log(promise); // Promise { <pending> } | Promise { <rejected> 'Alex НЕ является JavaScript разработчиком' }
 
-
+// также у промисов есть три метода: 
 // then, catch, finally
-// then будет вызываться, когда будет выполняться resolve
-promise.then(() => {
+// 1. then будет вызываться, когда будет успешное выполнение промиса - выполняется resolve
+// then принимает в себя callback
 
-})
+// 2. catch вызывается, если была ошибка, выполняется reject
 
+// 3. finally вызывается в последнюю очередь независимо от исхода
+
+promise
+   .then((successMessage) => {
+      console.log(`successMessage: ${successMessage}`); // successMessage: Alex является JavaScript разработчиком
+   })
+   .catch((err) => {
+      console.log(`error: ${err}`); // error: Alex НЕ является JavaScript разработчиком
+   })
+   .finally(() => {
+      console.log('finally'); // finally
+   });
