@@ -45,7 +45,7 @@ const developer = {
 };
 
 // для обработки асинхронного кода у нас есть промис,
-// промис принимает в себя функцию и данная функция принимает в себя 
+// промис принимает в себя функцию и данная функция принимает в себя
 // еще две функции resolve и reject
 // resolve нужен, чтобы выполнить промис со статусом fullfilled
 // reject - для того, чтобы промис выполнился со статусом rejected
@@ -62,10 +62,10 @@ const promise = new Promise((resolve, reject) => {
 
 console.log(promise); // Promise { <pending> } | Promise { <rejected> 'Alex НЕ является JavaScript разработчиком' }
 
-// также у промисов есть три метода: 
+// также у промисов есть три метода:
 // then, catch, finally
 // 1. then будет вызываться, когда будет успешное выполнение промиса - выполняется resolve
-// then принимает в себя callback
+// then принимает в себя callback, вызывающийся при успешном выполнении промиса
 
 // 2. catch вызывается, если была ошибка, выполняется reject
 
@@ -81,3 +81,77 @@ promise
    .finally(() => {
       console.log('finally'); // finally
    });
+
+// fetch - это специальная функция, с помощью которой мы можем получать данные по url
+// fetch(url); // получаем промис
+// const url = 'https://jsonplaceholder.typicode.com/todos/1';
+
+// у fetch также есть then, catch и finally
+// вторым параметром передается объект с настройками нашего запроса
+// далее then необходимо декодировать(расшифровать) в формате JSON
+
+const TODOS_URL = 'https://jsonplaceholder.typicode.com/todos';
+
+const createTodoElement = (text) => {
+   const todoElement = document.createElement('li');
+   const todoElementAnchor = document.createElement('a');
+   todoElementAnchor.href = '#';
+   todoElementAnchor.textContent = text;
+   todoElement.append(todoElementAnchor);
+
+   return todoElement;
+};
+
+const toggleLoader = () => {
+   const loader = document.querySelector('#loader');
+   console.log('loader', loader);
+
+   const isHidden = loader.hasAttribute('hidden');
+   if (isHidden) {
+      loader.removeAttribute('hidden');
+   } else {
+      loader.setAttribute('hidden', '');
+   }
+};
+
+const dataContainer = document.querySelector('#data-container');
+console.log('dataContainer', dataContainer);
+
+const getAllTodos = () => {
+   toggleLoader();
+
+   const result = fetch(TODOS_URL, {
+      method: 'GET'
+   });
+
+   console.log('result', result);
+
+   result
+      .then((response) => {
+         console.log('response', response);
+
+         if (!response.ok) {
+            throw new Error('Ошибка запроса');
+         }
+
+         return response.json();
+      })
+      .then((todos) => {
+         console.log('todos', todos);
+         todos.forEach((todo) => {
+            const todoHTML = createTodoElement(todo.title);
+            dataContainer.append(todoHTML);
+         });
+      })
+      .catch((err) => {
+         console.log('err', err);
+      })
+      .finally(() => {
+         toggleLoader();
+      });
+};
+
+getAllTodos();
+
+
+// Promise.all
