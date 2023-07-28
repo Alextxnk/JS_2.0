@@ -75,8 +75,8 @@ promise
    .then((successMessage) => {
       console.log(`successMessage: ${successMessage}`); // successMessage: Alex является JavaScript разработчиком
    })
-   .catch((err) => {
-      console.log(`error: ${err}`); // error: Alex НЕ является JavaScript разработчиком
+   .catch((error) => {
+      console.log('error', error); // error: Alex НЕ является JavaScript разработчиком
    })
    .finally(() => {
       console.log('finally'); // finally
@@ -143,8 +143,8 @@ const getAllTodos = () => {
             dataContainer.append(todoHTML);
          });
       })
-      .catch((err) => {
-         console.log('err', err);
+      .catch((error) => {
+         console.log('error', error);
       })
       .finally(() => {
          toggleLoader();
@@ -194,8 +194,112 @@ const getTodosByIds = (ids) => {
          });
       })
       .catch((error) => {
-         console.log(error);
+         console.log('error', error);
       });
 };
 
 getTodosByIds(todosIds);
+
+// Promise.race - тоже принимает в себя массив промисов и возвращает самый быстро выполненый промис
+
+const promise1 = new Promise((resolve) => {
+   setTimeout(() => {
+      resolve('First');
+   }, 1000);
+});
+
+const promise2 = new Promise((resolve) => {
+   setTimeout(() => {
+      resolve('Second');
+   }, 500);
+});
+
+const promise3 = new Promise((resolve) => {
+   setTimeout(() => {
+      resolve('Third');
+   }, 250);
+});
+
+Promise.race([promise1, promise2, promise3])
+   .then((result) => {
+      console.log('result', result); // Third - выполнится быстрее всего
+   })
+   .catch((error) => {
+      console.log('error', error);
+   });
+
+// главная проблема then, catch, finally и их замена на
+// async, await
+
+const USERS_URL = 'https://jsonplaceholder.typicode.com/users';
+
+fetch(USERS_URL)
+   .then((response) => response.json())
+   .then((users) => {
+      console.log('users', users);
+      const firstUserId = users[0]?.id;
+      console.log('firstUserId', firstUserId);
+
+      fetch(`${TODOS_URL}?userId=${firstUserId}`)
+         .then((response) => response.json())
+         .then((todos) => {
+            console.log('NewTodos', todos);
+         })
+         .catch((error) => {
+            console.log('error', error);
+         });
+   })
+   .catch((error) => {
+      console.log('error', error);
+   });
+
+// async, await
+// если мы указываем перед функцией async,
+// то она автоматически возвращает промис
+
+// также у нас существует конструкция await(ожидать),
+// которая существует для обработки асинхронных запросов
+
+// так наш код не растет вправо, а идет линейно
+// это нам позволяет делать конструкция async, await
+
+// ошибки тут обрабатываются при помощи try, catch, finally
+
+// если хотябы в одной строчке кода try будет ошибка, то выполнится catch
+try {
+} catch (error) {
+   console.log('error', error);
+} finally {
+   console.log('finally');
+}
+
+const getTodosWithUserData = async () => {
+   try {
+      const response = await fetch(USERS_URL); // await будет ждать, пока не выполнится запрос
+      console.log('asyncResponse', response);
+
+      if (!response.ok) {
+         throw new Error('Ошибка в получении данных о пользователях');
+      }
+
+      const users = await response.json();
+      console.log('asyncUsers', users);
+      const firstUserId = users[0]?.id;
+
+      const todosResponse = await fetch(`${TODOS_URL}?userId=${firstUserId}`);
+
+      if (!todosResponse.ok) {
+         throw new Error('Ошибка в получении данных о задачах');
+      }
+
+      const todos = await todosResponse.json();
+      console.log('asyncTodos', todos);
+   } catch (error) {
+      console.log('error', error);
+   } finally {
+      console.log('asyncFinally');
+   }
+};
+
+const asyncPromise = getTodosWithUserData();
+console.log('asyncPromise', asyncPromise);
