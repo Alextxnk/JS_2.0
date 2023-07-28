@@ -128,7 +128,7 @@ const getAllTodos = () => {
 
    result
       .then((response) => {
-         console.log('response', response);
+         // console.log('fetch response', response);
 
          if (!response.ok) {
             throw new Error('Ошибка запроса');
@@ -153,5 +153,51 @@ const getAllTodos = () => {
 
 getAllTodos();
 
+// Promise.all - это специальный метод у промисов, который нужен для того,
+// чтобы обработать список некоторых промисов 
+// возвращает fullfilled в том случае, если все переданные промисы тоже имеют статус fullfilled
+// если хотябы один промис имеет статус rejected, то тогда Promise.all вернет rejected
 
-// Promise.all
+
+// возвращает промис, который будет выполнен тогда, когда все промисы
+// переданные в качестве массива будт выполнены успешно,
+// либо когда один из промисов вернет ошибку
+
+/* Promise.all([
+   new Promise(), 
+   new Promise(), 
+   new Promise()
+]); */
+
+// возвращаемые значения:
+// fullfilled - value - удачное выполнение промиса
+// rejected - error - ошибка
+
+const todosIds = [43, 10, 5, 100, 101];
+
+const getTodosByIds = (ids) => {
+   const requests = ids.map((id) => fetch(`${TODOS_URL}/${id}`));
+   Promise.all(requests)
+      .then((responses) => {
+         const dataResults = responses.map((response, index) => {
+            console.log(`response ${index}`, response);
+            return response.json();
+         });
+         console.log('dataResults', dataResults);
+
+         return Promise.all(dataResults);
+      })
+      .then((todos) => {
+         console.log('todos', todos);
+         todos.forEach((todo) => {
+            const todoHTML = createTodoElement(todo.title);
+            dataContainer.append(todoHTML);
+         })
+      })
+      .catch((error) => {
+         console.log(error);
+      })
+};
+
+getTodosByIds(todosIds);
+
