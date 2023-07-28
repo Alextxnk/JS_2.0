@@ -154,10 +154,9 @@ const getAllTodos = () => {
 getAllTodos();
 
 // Promise.all - это специальный метод у промисов, который нужен для того,
-// чтобы обработать список некоторых промисов 
+// чтобы обработать список некоторых промисов
 // возвращает fullfilled в том случае, если все переданные промисы тоже имеют статус fullfilled
 // если хотябы один промис имеет статус rejected, то тогда Promise.all вернет rejected
-
 
 // возвращает промис, который будет выполнен тогда, когда все промисы
 // переданные в качестве массива будт выполнены успешно,
@@ -192,12 +191,11 @@ const getTodosByIds = (ids) => {
          todos.forEach((todo) => {
             const todoHTML = createTodoElement(todo.title);
             dataContainer.append(todoHTML);
-         })
+         });
       })
       .catch((error) => {
          console.log(error);
-      })
+      });
 };
 
 getTodosByIds(todosIds);
-
